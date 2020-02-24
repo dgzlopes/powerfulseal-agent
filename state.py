@@ -2,6 +2,7 @@ from base import AbstractAttack
 import uuid
 import os
 
+
 class StateAttack(AbstractAttack):
     def __init__(self, type, args, target):
         self.id = uuid.uuid1()
@@ -15,9 +16,9 @@ class StateAttack(AbstractAttack):
 
     def run(self):
         if self.type == "shutdown":
-            os.system('echo o > /sysrq')
+            os.system("echo o > /sysrq")
         elif self.type == "restart":
-            os.system('echo b > /sysrq')
+            os.system("echo b > /sysrq")
         return self.id
 
     def remove(self):

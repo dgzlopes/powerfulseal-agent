@@ -34,7 +34,7 @@ def build(config):
         new_attack = NetworkAttack(
             config.command.type, config.command.args, config.target
         )
-    elif config.command.type in ("shutdown","restart"):
+    elif config.command.type in ("shutdown", "restart"):
         new_attack = StateAttack(
             config.command.type, config.command.args, config.target
         )
@@ -73,26 +73,28 @@ def attack_cleaner():
 def on_first_run():
     logger.warning("Cleaning past attacks")
 
+
 @app.get("/")
 def default():
-    '''
+    """
         Default message.
-    '''
+    """
     return {"message": "Powerfulseal-Agent POC"}
+
 
 @app.get("/attacks")
 def list_all_attacks():
-    '''
+    """
         List all attacks.
-    '''
+    """
     return {"attacks": attack_list}
 
 
 @app.get("/attacks/{attack_id}")
 def list_specific_attack(attack_id: str):
-    '''
+    """
         List a specific attack.
-    '''
+    """
     for attack in attack_list:
         if str(attack.id) == attack_id:
             return {"removed": attack}
@@ -102,9 +104,9 @@ def list_specific_attack(attack_id: str):
 
 @app.delete("/attacks")
 def delete_all_active_attacks():
-    '''
+    """
         Delete all existing attacks.
-    '''
+    """
     for attack in attack_list:
         attack.remove()
     attack_list.clear()
@@ -113,9 +115,9 @@ def delete_all_active_attacks():
 
 @app.delete("/attacks/{attack_id}")
 def delete_specific_attack(attack_id: str):
-    '''
+    """
         Delete one specific attack.
-    '''
+    """
     for index, attack in enumerate(attack_list):
         if str(attack.id) == attack_id:
             attack.remove()
@@ -127,7 +129,7 @@ def delete_specific_attack(attack_id: str):
 
 @app.post("/attacks/new")
 def create_new_attack(attack: AttackConfig):
-    '''
+    """
         Create a new attack.
-    '''
+    """
     return {"running": build(attack)}
