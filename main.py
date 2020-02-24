@@ -47,7 +47,7 @@ class AttackType(str, Enum):
     memory = "memory"
     latency = "latency"
     shutdown = "shutdown"
-    shutdown = "restart"
+    restart = "restart"
 
 
 class Command(BaseModel):
@@ -57,7 +57,6 @@ class Command(BaseModel):
 
 class AttackConfig(BaseModel):
     command: Command
-    target: List[str]
 
 
 @app.on_event("startup")
