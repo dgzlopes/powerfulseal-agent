@@ -3,11 +3,10 @@ import uuid
 
 
 class NetworkAttack(AbstractAttack):
-    def __init__(self, type, args, target):
+    def __init__(self, type, args):
         self.id = uuid.uuid1()
         self.type = type
         self.args = args
-        self.target = target
         it = iter(self.args)
         self.duration = 60
         for elem in it:

@@ -27,17 +27,11 @@ attack_list = []
 
 def build(config):
     if config.command.type in ("cpu", "memory"):
-        new_attack = ResourceAttack(
-            config.command.type, config.command.args, config.target
-        )
+        new_attack = ResourceAttack(config.command.type, config.command.args)
     elif config.command.type in ("latency"):
-        new_attack = NetworkAttack(
-            config.command.type, config.command.args, config.target
-        )
+        new_attack = NetworkAttack(config.command.type, config.command.args)
     elif config.command.type in ("shutdown", "restart"):
-        new_attack = StateAttack(
-            config.command.type, config.command.args, config.target
-        )
+        new_attack = StateAttack(config.command.type, config.command.args)
     attack_list.append(new_attack)
     return new_attack.run()
 
@@ -53,6 +47,10 @@ class AttackType(str, Enum):
 class Command(BaseModel):
     type: AttackType
     args: List[str] = []
+
+
+class AttackId(BaseModel):
+    id: str
 
 
 class AttackConfig(BaseModel):
@@ -74,14 +72,6 @@ def on_first_run():
     logger.warning("Cleaning past attacks")
 
 
-@app.get("/")
-def default():
-    """
-        Default message.
-    """
-    return {"message": "Powerfulseal-Agent POC"}
-
-
 @app.get("/attacks")
 def list_all_attacks():
     """
@@ -97,9 +87,9 @@ def list_specific_attack(attack_id: str):
     """
     for attack in attack_list:
         if str(attack.id) == attack_id:
-            return {"removed": attack}
+            return attack
 
-    return {"message": "not found"}
+    return {"id": "not found"}
 
 
 @app.delete("/attacks")
@@ -113,7 +103,7 @@ def delete_all_active_attacks():
     return {"removed": "all attacks"}
 
 
-@app.delete("/attacks/{attack_id}")
+@app.delete("/attacks/{attack_id}", response_model=AttackId)
 def delete_specific_attack(attack_id: str):
     """
         Delete one specific attack.
@@ -122,14 +112,14 @@ def delete_specific_attack(attack_id: str):
         if str(attack.id) == attack_id:
             attack.remove()
             attack_list.pop(index)
-            break
+            return {"id": str(attack_id)}
 
-    return {"removed": attack_id}
+    return {"id": "Attack not found"}
 
 
-@app.post("/attacks/new")
+@app.post("/attacks/new", response_model=AttackId)
 def create_new_attack(attack: AttackConfig):
     """
         Create a new attack.
     """
-    return {"running": build(attack)}
+    return {"id": str(build(attack))}
