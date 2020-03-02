@@ -10,7 +10,8 @@ RUN  apt-get update && \
 RUN pip3 install tcconfig flask fastapi fastapi_utils psutil
 #RUN curl -fsSL get.docker.com | sh
 
-COPY main.py network.py resource.py state.py utils.py base.py ./
+COPY powerfulseal_agent/main.py powerfulseal_agent/network.py powerfulseal_agent/resource.py ./
+COPY powerfulseal_agent/state.py powerfulseal_agent/utils.py powerfulseal_agent/base.py ./
 
 
 ENTRYPOINT ["uvicorn","main:app","--reload"]
