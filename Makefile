@@ -8,7 +8,7 @@ run:
     --network host \
     --cap-add NET_ADMIN \
     --restart always \
-	-p 8000:8000 \
+	-p 127.0.0.1:8000:8000 \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v /proc/sysrq-trigger:/sysrq \
     dgzlopes/powerfulseal-agent:latest
