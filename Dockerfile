@@ -7,7 +7,8 @@ RUN  apt-get update && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
 
-RUN pip3 install tcconfig flask fastapi fastapi_utils psutil
+COPY requirements.txt ./
+RUN pip3 install -r requirements.txt
 #RUN curl -fsSL get.docker.com | sh
 
 COPY powerfulseal_agent/main.py powerfulseal_agent/network.py powerfulseal_agent/resource.py ./
