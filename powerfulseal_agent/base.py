@@ -1,12 +1,10 @@
-import abc, six
+from abc import ABC, abstractmethod
 
-
-@six.add_metaclass(abc.ABCMeta)
-class AbstractAttack:
-    @abc.abstractmethod
+class AbstractAttack(ABC):
+    @abstractmethod
     def run(self):
         pass  # pragma: no cover
 
-    @abc.abstractmethod
+    @abstractmethod
     def remove(self):
         pass  # pragma: no cover
